@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Видео 1:1 — Лототрон · Сочный вертел</title>
+  <style>
+    @font-face { font-family: "ROBO"; src: url("../assets/fonts/robo.woff") format("woff"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "Gilroy"; src: url("../assets/fonts/gilroy-regular.woff") format("woff"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "Gilroy"; src: url("../assets/fonts/gilroy-semibold.woff") format("woff"); font-weight: 600; font-display: swap; }
+    @font-face { font-family: "Gilroy"; src: url("../assets/fonts/gilroy-bold.woff") format("woff"); font-weight: 700; font-display: swap; }
+
+    :root { --t: 0; --dur: 8s; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: #121212; }
+    body { font-family: "Gilroy", system-ui, sans-serif; color: #fff; -webkit-font-smoothing: antialiased; }
+
+    .stage {
+      width: 1080px; height: 1080px; position: relative; overflow: hidden;
+      background: #121212;
+    }
+    .glow {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(700px 480px at 88% -8%, rgba(255,44,44,0.36), transparent 60%),
+        radial-gradient(520px 420px at -8% 30%, rgba(255,94,44,0.18), transparent 60%),
+        radial-gradient(640px 480px at 50% 110%, rgba(255,44,44,0.22), transparent 62%);
+    }
+    .embers { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+    .embers i {
+      position: absolute; width: 5px; height: 5px; border-radius: 50%;
+      background: radial-gradient(circle, #ffd9a8 0%, #ff5e2c 45%, rgba(255,44,44,0) 75%);
+    }
+
+    .chrome {
+      position: absolute; z-index: 5; top: 0; left: 0; right: 0;
+      padding: 48px 56px 0;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo { width: 200px; display: block; }
+    .badge {
+      display: flex; align-items: center; gap: 8px; background: #fff; color: #1c1c1c;
+      border-radius: 12px; padding: 7px 12px 7px 7px;
+    }
+    .badge b { font-family: "ROBO", sans-serif; font-size: 24px; letter-spacing: 0.04em; line-height: 1; }
+    .badge small { display: block; font-size: 10px; font-weight: 700; color: #7a7a7a; }
+    .stars { color: #fc0; font-size: 12px; letter-spacing: 0.04em; }
+
+    .scene {
+      position: absolute; inset: 0; z-index: 3;
+      padding: 140px 56px 44px;
+      opacity: 0; visibility: hidden;
+    }
+
+    .tag {
+      display: inline-flex; align-items: center; width: fit-content;
+      padding: 10px 18px; border-radius: 999px;
+      background: linear-gradient(90deg, #ff2c2c, #ff5e2c); font-weight: 700; font-size: 18px;
+      box-shadow: 0 10px 30px rgba(255,44,44,0.35);
+    }
+    .hook {
+      margin: 22px 0 0; font-weight: 800; font-size: 58px; line-height: 1.08;
+      letter-spacing: -0.025em; max-width: 12ch;
+    }
+    .offer {
+      font-family: "ROBO", sans-serif; font-weight: 400; text-transform: uppercase;
+      letter-spacing: 0.04em; font-size: 54px; line-height: 0.95; margin: 14px 0 0;
+    }
+    .offer .red { color: #ff2c2c; }
+    .caption {
+      margin: 28px 0 0; text-align: center; font-weight: 700; font-size: 32px;
+      color: rgba(255,255,255,0.86);
+    }
+
+    .wheel {
+      position: relative; border-radius: 50%;
+      background: radial-gradient(circle at 50% 45%, #2a2a2a, #141414 75%);
+      box-shadow:
+        inset 0 0 0 12px #1c1c1c, inset 0 0 0 16px #ff2c2c, inset 0 0 0 18px #1c1c1c,
+        0 16px 50px rgba(0,0,0,0.45), 0 0 80px rgba(255,44,44,0.28);
+      overflow: hidden; flex: 0 0 auto;
+    }
+    .wheel-glass {
+      position: absolute; inset: 0; border-radius: 50%; z-index: 2; pointer-events: none;
+      background: linear-gradient(135deg, rgba(255,255,255,0.16), transparent 45%, rgba(255,255,255,0.04));
+    }
+    .balls { position: absolute; inset: 22px; }
+    .ball {
+      position: absolute; width: 34px; height: 34px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff, var(--c) 45%, color-mix(in srgb, var(--c) 60%, #000) 100%);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+    }
+
+    .s1 { display: flex; flex-direction: column; justify-content: center; padding-bottom: 80px; }
+    .s2 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .s2 .wheel { width: 520px; height: 520px; }
+    .s3 { display: flex; flex-direction: column; }
+    .s3 .body {
+      display: grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: center;
+      margin-top: 22px; flex: 1; min-height: 0;
+    }
+    .s3 .wheel { width: 340px; height: 340px; }
+    .proof {
+      background: #fafafa; color: #1c1c1c; border-radius: 16px;
+      padding: 18px 20px; box-shadow: 0 16px 50px rgba(0,0,0,0.35);
+    }
+    .proof .kicker { text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: #8e8e8e; font-size: 13px; }
+    .proof .line { font-weight: 800; font-size: 28px; line-height: 1.15; margin-top: 4px; }
+    .proof em { font-style: normal; color: #ff2c2c; }
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .pill {
+      display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px; font-weight: 700; font-size: 18px;
+    }
+    .pill.gold { background: rgba(255,44,44,0.14); border-color: rgba(255,44,44,0.4); }
+    .cta {
+      margin-top: 22px; display: flex; align-items: center; justify-content: center;
+      padding: 20px; border-radius: 15px; font-weight: 700; font-size: 28px;
+      background: linear-gradient(90deg, #ff2c2c, #ff5e2c); box-shadow: 0 10px 30px rgba(255,44,44,0.35);
+    }
+    .foot { margin-top: 14px; display: flex; justify-content: space-between; font-size: 18px; }
+    .addr { color: rgba(255,255,255,0.62); }
+    .url { font-weight: 700; color: #ff8562; }
+
+    .s1 { animation: scene1 var(--dur) linear both; }
+    .s2 { animation: scene2 var(--dur) linear both; }
+    .s3 { animation: scene3 var(--dur) linear both; }
+    .s2 .wheel { animation: spin 2.8s linear infinite; }
+
+    @keyframes scene1 {
+      0% { opacity: 0; visibility: hidden; }
+      4% { opacity: 1; visibility: visible; }
+      26% { opacity: 1; visibility: visible; }
+      32%, 100% { opacity: 0; visibility: hidden; }
+    }
+    @keyframes scene2 {
+      0%, 28% { opacity: 0; visibility: hidden; }
+      34% { opacity: 1; visibility: visible; }
+      58% { opacity: 1; visibility: visible; }
+      64%, 100% { opacity: 0; visibility: hidden; }
+    }
+    @keyframes scene3 {
+      0%, 60% { opacity: 0; visibility: hidden; }
+      66% { opacity: 1; visibility: visible; }
+      100% { opacity: 1; visibility: visible; }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    html.seek [data-anim] {
+      animation-delay: calc(var(--t) * -1s) !important;
+      animation-play-state: paused !important;
+    }
+    html.seek .s2 .wheel { animation: none !important; }
+
+    html.live .stage { margin: 24px auto; box-shadow: 0 24px 80px rgba(0,0,0,0.55); }
+    .hint {
+      display: none; max-width: 1080px; margin: 16px auto 0; padding: 0 20px 40px;
+      color: #9a9a9a; font-size: 0.92rem; line-height: 1.5;
+    }
+    html.live .hint { display: block; }
+    .hint a { color: #ff8562; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="glow"></div>
+    <div class="embers" data-embers></div>
+
+    <header class="chrome">
+      <img class="logo" src="../assets/logo.svg" alt="Сочный Вертел">
+      <div class="badge">
+        <svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true">
+          <circle cx="16" cy="16" r="16" fill="#FC3F1D"/>
+          <path d="M16.1 6.6c-3.9 0-6.6 2.5-6.6 6.1 0 4.4 5.5 11.2 6.2 12.1.2.2.5.2.7 0 .7-.9 6.2-7.7 6.2-12.1 0-3.6-2.7-6.1-6.5-6.1zm0 8.4a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z" fill="#fff"/>
+        </svg>
+        <span><small>Яндекс Карты</small><b>5,0</b><span class="stars">★★★★★</span></span>
+      </div>
+    </header>
+
+    <section class="scene s1" data-anim>
+      <span class="tag">Беспроигрышная лотерея</span>
+      <p class="hook">Пришёл за шаурмой — ушёл с подарком</p>
+    </section>
+
+    <section class="scene s2" data-anim>
+      <div class="wheel">
+        <div class="wheel-glass"></div>
+        <div class="balls" data-balls></div>
+      </div>
+      <p class="caption">Крути барабан на кассе</p>
+    </section>
+
+    <section class="scene s3" data-anim>
+      <span class="tag">Беспроигрышная лотерея</span>
+      <p class="hook" style="font-size:46px;max-width:14ch">Пришёл за шаурмой — ушёл с подарком</p>
+      <div class="offer"><span class="red">Лототрон</span> от 500 ₽</div>
+      <div class="body">
+        <div>
+          <div class="proof">
+            <div class="kicker">Главное правило</div>
+            <div class="line">Проигрышных шариков <em>нет</em></div>
+          </div>
+          <div class="pills">
+            <span class="pill">🥫 Соус</span>
+            <span class="pill">🍟 Фри</span>
+            <span class="pill">🥤 Напиток</span>
+            <span class="pill gold">🏆 10 000 ₽</span>
+          </div>
+        </div>
+        <div class="wheel">
+          <div class="wheel-glass"></div>
+          <div class="balls" data-balls></div>
+        </div>
+      </div>
+      <div class="cta">Забери подарок →</div>
+      <div class="foot">
+        <span class="addr">Анапа, Крымская 182Г</span>
+        <span class="url">sochnyvertelanapa.github.io</span>
+      </div>
+    </section>
+  </div>
+
+  <p class="hint">
+    Ролик 8 секунд, 1080×1080. В рекламе ведите на
+    <a href="https://sochnyvertelanapa.github.io/#drum">sochnyvertelanapa.github.io/#drum</a>.
+    Готовый файл: <a href="lototron-1x1.mp4">lototron-1x1.mp4</a> ·
+    <a href="lototron.html">К баннерам</a>
+  </p>
+<script>
+  const COLORS = ["#ff2c2c", "#ff5e2c", "#ffffff", "#ffb347", "#ff2c2c", "#d9d9d9", "#ff5e2c"];
+  const BALLS = [
+    [22, 58], [38, 70], [54, 64], [68, 74], [30, 80], [48, 82], [62, 56],
+    [18, 42], [34, 48], [50, 40], [66, 46], [78, 60], [26, 32], [44, 28],
+    [58, 30], [72, 36], [40, 58], [56, 52], [33, 64], [47, 72], [63, 68],
+    [75, 50], [28, 50], [52, 76], [41, 38], [60, 42]
+  ];
+  document.querySelectorAll("[data-balls]").forEach((box) => {
+    box.innerHTML = BALLS.map(([x, y], i) =>
+      `<div class="ball" style="--c:${COLORS[i % COLORS.length]};left:calc(${x}% - 17px);top:calc(${y}% - 17px)"></div>`
+    ).join("");
+  });
+  const embers = document.querySelector("[data-embers]");
+  let ehtml = "";
+  for (let i = 0; i < 16; i++) {
+    ehtml += `<i style="left:${(i * 17) % 100}%;bottom:${20 + (i * 13) % 50}%"></i>`;
+  }
+  embers.innerHTML = ehtml;
+
+  const q = new URLSearchParams(location.search);
+  const t = parseFloat(q.get("t"));
+  if (!Number.isNaN(t)) {
+    document.documentElement.classList.add("seek");
+    document.documentElement.style.setProperty("--t", String(Math.max(0, Math.min(8, t))));
+    const spin = document.querySelector(".s2 .wheel");
+    if (spin) spin.style.transform = `rotate(${(t * 128).toFixed(1)}deg)`;
+  } else {
+    document.documentElement.classList.add("live");
+  }
+</script>
+</body>
+</html>

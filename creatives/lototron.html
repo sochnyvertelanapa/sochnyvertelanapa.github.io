@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Креатив — Лототрон · Сочный вертел</title>
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <style>
+    @font-face { font-family: "ROBO"; src: url("../assets/fonts/robo.woff") format("woff"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "Gilroy"; src: url("../assets/fonts/gilroy-regular.woff") format("woff"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "Gilroy"; src: url("../assets/fonts/gilroy-semibold.woff") format("woff"); font-weight: 600; font-display: swap; }
+    @font-face { font-family: "Gilroy"; src: url("../assets/fonts/gilroy-bold.woff") format("woff"); font-weight: 700; font-display: swap; }
+
+    :root {
+      --bg: #121212;
+      --red: #ff2c2c;
+      --red-2: #ff5e2c;
+      --grad: linear-gradient(90deg, #ff2c2c 0%, #ff5e2c 100%);
+      --text: #fff;
+      --muted: #9a9a9a;
+      --font: "Gilroy", system-ui, sans-serif;
+      --display: "ROBO", "Gilroy", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      font-family: var(--font);
+      background: #0a0a0a;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .studio {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 20px 64px;
+    }
+    .studio-head { margin-bottom: 22px; }
+    .studio-head h1 {
+      font-family: var(--display);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 1.7rem;
+      margin: 0 0 8px;
+    }
+    .studio-head p { margin: 0; color: var(--muted); max-width: 62ch; line-height: 1.5; }
+    .studio-head a { color: #ff8562; }
+    .formats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .formats a, .formats button {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      font: 600 0.88rem var(--font);
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .formats a:hover, .formats button:hover { border-color: var(--red); }
+    .formats .primary { background: var(--grad); border-color: transparent; box-shadow: 0 10px 30px rgba(255,44,44,0.35); }
+
+    .gallery { display: grid; gap: 40px; margin-top: 28px; }
+    .card { display: grid; gap: 10px; justify-items: start; }
+    .card-label { font-size: 0.78rem; color: var(--muted); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+
+    .frame {
+      background: #000;
+      border-radius: 8px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.55);
+      overflow: hidden;
+    }
+    .artboard {
+      position: relative;
+      overflow: hidden;
+      color: #fff;
+      background: #121212;
+      font-family: var(--font);
+    }
+    .artboard * { -webkit-font-smoothing: antialiased; }
+
+    .embers { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+    .embers i {
+      position: absolute; bottom: -8px; width: 5px; height: 5px; border-radius: 50%;
+      background: radial-gradient(circle, #ffd9a8 0%, #ff5e2c 45%, rgba(255,44,44,0) 75%);
+      opacity: 0.75;
+    }
+    .glow {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(700px 480px at 85% -8%, rgba(255,44,44,0.34), transparent 60%),
+        radial-gradient(520px 420px at -8% 28%, rgba(255,94,44,0.18), transparent 60%),
+        radial-gradient(640px 480px at 50% 108%, rgba(255,44,44,0.22), transparent 62%);
+    }
+
+    .inner { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; }
+
+    .logo { height: auto; display: block; }
+    .tag {
+      display: inline-flex; align-items: center;
+      background: var(--grad); color: #fff; font-weight: 700;
+      border-radius: 999px; box-shadow: 0 10px 30px rgba(255,44,44,0.35);
+    }
+    .h-main {
+      font-family: var(--display); font-weight: 400; text-transform: uppercase;
+      letter-spacing: 0.04em; line-height: 0.92; margin: 0;
+    }
+    .h-main .red { color: var(--red); }
+    .lead { margin: 0; color: rgba(255,255,255,0.78); }
+    .cta {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      background: var(--grad); color: #fff; font-weight: 700;
+      border-radius: 15px; box-shadow: 0 10px 30px rgba(255,44,44,0.35);
+    }
+    .url { font-weight: 700; letter-spacing: 0.01em; }
+    .addr { color: rgba(255,255,255,0.62); }
+
+    .wheel {
+      position: relative; border-radius: 50%; aspect-ratio: 1;
+      background: radial-gradient(circle at 50% 45%, #2a2a2a, #141414 75%);
+      box-shadow:
+        inset 0 0 0 12px #1c1c1c,
+        inset 0 0 0 16px #ff2c2c,
+        inset 0 0 0 18px #1c1c1c,
+        0 16px 50px rgba(0,0,0,0.45),
+        0 0 80px rgba(255,44,44,0.28);
+      overflow: hidden; flex: 0 0 auto;
+    }
+    .wheel-glass {
+      position: absolute; inset: 0; border-radius: 50%; z-index: 2; pointer-events: none;
+      background: linear-gradient(135deg, rgba(255,255,255,0.16), transparent 45%, rgba(255,255,255,0.04));
+    }
+    .balls { position: absolute; inset: 22px; }
+    .ball {
+      position: absolute; width: 34px; height: 34px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff, var(--c) 45%, color-mix(in srgb, var(--c) 60%, #000) 100%);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+    }
+
+    .badge {
+      display: flex; align-items: center; gap: 8px;
+      background: #fff; color: #1c1c1c; border-radius: 12px;
+    }
+    .badge b { font-family: var(--display); letter-spacing: 0.04em; line-height: 1; }
+    .badge small { display: block; font-size: 10px; font-weight: 700; color: #7a7a7a; }
+    .stars { color: #fc0; letter-spacing: 0.04em; }
+
+    .proof {
+      background: #fafafa; color: #1c1c1c; border-radius: 16px;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.35);
+    }
+    .proof .kicker { text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: #8e8e8e; }
+    .proof .line { font-weight: 800; color: #1c1c1c; }
+    .proof .line em { font-style: normal; color: var(--red); }
+
+    .pills { display: flex; flex-wrap: wrap; }
+    .pill {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px; font-weight: 700;
+    }
+    .pill.gold { background: rgba(255,44,44,0.14); border-color: rgba(255,44,44,0.4); }
+
+    /* ---- story 1080×1920 ---- */
+    .story { width: 1080px; height: 1920px; }
+    .story .inner { padding: 72px 72px 64px; }
+    .story .top { display: flex; justify-content: space-between; align-items: center; }
+    .story .logo { width: 220px; }
+    .story .badge { padding: 8px 14px 8px 8px; }
+    .story .badge svg { width: 40px; height: 40px; }
+    .story .badge b { font-size: 28px; }
+    .story .badge .stars { font-size: 13px; }
+    .story .tag { margin-top: 54px; padding: 12px 22px; font-size: 22px; }
+    .story .h-main { font-size: 118px; margin-top: 22px; }
+    .story .lead { font-size: 34px; margin-top: 18px; max-width: 16ch; font-weight: 600; }
+    .story .wheel { width: 520px; margin: 48px auto 0; }
+    .story .proof { margin-top: 42px; padding: 28px 32px; }
+    .story .proof .kicker { font-size: 16px; }
+    .story .proof .line { font-size: 40px; line-height: 1.15; margin-top: 6px; }
+    .story .pills { gap: 12px; margin-top: 28px; }
+    .story .pill { padding: 14px 18px; font-size: 24px; }
+    .story .cta { margin-top: auto; width: 100%; padding: 28px 24px; font-size: 34px; }
+    .story .foot { margin-top: 22px; display: flex; justify-content: space-between; align-items: baseline; }
+    .story .addr { font-size: 22px; }
+    .story .url { font-size: 22px; color: #ff8562; }
+
+    /* ---- feed 1080×1350 ---- */
+    .feed { width: 1080px; height: 1350px; }
+    .feed .inner { padding: 56px 64px 48px; }
+    .feed .top { display: flex; justify-content: space-between; align-items: center; }
+    .feed .logo { width: 190px; }
+    .feed .badge { padding: 7px 12px 7px 7px; }
+    .feed .badge svg { width: 34px; height: 34px; }
+    .feed .badge b { font-size: 24px; }
+    .feed .badge .stars { font-size: 12px; }
+    .feed .mid { display: grid; grid-template-columns: 1fr 420px; gap: 36px; align-items: center; margin-top: 40px; flex: 1; }
+    .feed .tag { padding: 10px 18px; font-size: 18px; }
+    .feed .h-main { font-size: 84px; margin-top: 16px; }
+    .feed .lead { font-size: 28px; margin-top: 14px; font-weight: 600; max-width: 14ch; }
+    .feed .wheel { width: 420px; }
+    .feed .pills { gap: 10px; margin-top: 22px; }
+    .feed .pill { padding: 12px 14px; font-size: 20px; }
+    .feed .cta { margin-top: 28px; width: 100%; padding: 22px; font-size: 30px; }
+    .feed .foot { margin-top: 18px; display: flex; justify-content: space-between; }
+    .feed .addr, .feed .url { font-size: 20px; }
+    .feed .url { color: #ff8562; }
+
+    /* ---- wide 1200×628 ---- */
+    .wide { width: 1200px; height: 628px; }
+    .wide .inner { padding: 40px 48px; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 28px; align-items: center; }
+    .wide .top { display: flex; align-items: center; gap: 16px; }
+    .wide .logo { width: 168px; }
+    .wide .badge { padding: 5px 10px 5px 5px; margin-left: auto; }
+    .wide .badge svg { width: 28px; height: 28px; }
+    .wide .badge b { font-size: 20px; }
+    .wide .badge .stars { font-size: 10px; }
+    .wide .tag { margin-top: 22px; padding: 8px 14px; font-size: 15px; }
+    .wide .h-main { font-size: 58px; margin-top: 10px; }
+    .wide .lead { font-size: 22px; margin-top: 10px; font-weight: 600; }
+    .wide .pills { gap: 8px; margin-top: 16px; }
+    .wide .pill { padding: 8px 12px; font-size: 16px; }
+    .wide .cta { margin-top: 20px; padding: 16px 22px; font-size: 22px; width: fit-content; min-width: 320px; }
+    .wide .foot { margin-top: 14px; display: flex; gap: 18px; }
+    .wide .addr, .wide .url { font-size: 16px; }
+    .wide .url { color: #ff8562; }
+    .wide .wheel { width: 360px; margin: 0 auto; }
+    .wide .right { display: grid; justify-items: center; }
+
+    /* ---- square 1080×1080 ---- */
+    .square { width: 1080px; height: 1080px; }
+    .square .inner { padding: 48px 56px 40px; }
+    .square .top { display: flex; justify-content: space-between; align-items: center; }
+    .square .logo { width: 200px; }
+    .square .badge { padding: 7px 12px 7px 7px; }
+    .square .badge svg { width: 34px; height: 34px; }
+    .square .badge b { font-size: 24px; }
+    .square .badge .stars { font-size: 12px; }
+    .square .tag { margin-top: 28px; padding: 10px 18px; font-size: 18px; width: fit-content; }
+    .square .hook {
+      margin: 18px 0 0; font-weight: 800; font-size: 46px; line-height: 1.12;
+      letter-spacing: -0.02em; max-width: 14ch;
+    }
+    .square .h-main { font-size: 54px; margin-top: 14px; }
+    .square .body {
+      display: grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: center;
+      margin-top: 22px; flex: 1;
+    }
+    .square .wheel { width: 340px; }
+    .square .proof { padding: 18px 20px; margin-top: 0; }
+    .square .proof .kicker { font-size: 13px; }
+    .square .proof .line { font-size: 28px; line-height: 1.15; margin-top: 4px; }
+    .square .pills { gap: 8px; margin-top: 14px; }
+    .square .pill { padding: 10px 12px; font-size: 18px; }
+    .square .cta { margin-top: 22px; width: 100%; padding: 20px; font-size: 28px; }
+    .square .foot { margin-top: 14px; display: flex; justify-content: space-between; }
+    .square .addr, .square .url { font-size: 18px; }
+    .square .url { color: #ff8562; }
+
+    /* ---- 4:5  1080×1350 ---- */
+    .r45 { width: 1080px; height: 1350px; }
+    .r45 .inner { padding: 56px 60px 48px; }
+    .r45 .top { display: flex; justify-content: space-between; align-items: center; }
+    .r45 .logo { width: 210px; }
+    .r45 .badge { padding: 7px 12px 7px 7px; }
+    .r45 .badge svg { width: 36px; height: 36px; }
+    .r45 .badge b { font-size: 26px; }
+    .r45 .badge .stars { font-size: 12px; }
+    .r45 .tag { margin-top: 36px; padding: 10px 18px; font-size: 20px; width: fit-content; }
+    .r45 .hook {
+      margin: 22px 0 0; font-weight: 800; font-size: 54px; line-height: 1.1;
+      letter-spacing: -0.02em; max-width: 13ch;
+    }
+    .r45 .h-main { font-size: 58px; margin-top: 16px; }
+    .r45 .body {
+      display: grid; grid-template-columns: 1fr 380px; gap: 32px; align-items: center;
+      margin-top: 28px; flex: 1;
+    }
+    .r45 .wheel { width: 380px; }
+    .r45 .proof { padding: 20px 22px; }
+    .r45 .proof .kicker { font-size: 14px; }
+    .r45 .proof .line { font-size: 30px; line-height: 1.15; margin-top: 4px; }
+    .r45 .pills { gap: 10px; margin-top: 16px; }
+    .r45 .pill { padding: 12px 14px; font-size: 20px; }
+    .r45 .cta { margin-top: 24px; width: 100%; padding: 22px; font-size: 30px; }
+    .r45 .foot { margin-top: 16px; display: flex; justify-content: space-between; }
+    .r45 .addr, .r45 .url { font-size: 20px; }
+    .r45 .url { color: #ff8562; }
+
+    /* ---- 16:9  1080×607 ---- */
+    .r169 { width: 1080px; height: 607px; }
+    .r169 .inner { padding: 28px 36px 22px; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; align-items: stretch; }
+    .r169 .left { display: flex; flex-direction: column; min-width: 0; }
+    .r169 .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .r169 .logo { width: 156px; }
+    .r169 .badge { padding: 4px 8px 4px 4px; }
+    .r169 .badge svg { width: 24px; height: 24px; }
+    .r169 .badge b { font-size: 18px; }
+    .r169 .badge .stars { font-size: 9px; }
+    .r169 .badge small { font-size: 8px; }
+    .r169 .tag { margin-top: 14px; padding: 6px 12px; font-size: 13px; width: fit-content; }
+    .r169 .hook {
+      margin: 10px 0 0; font-weight: 800; font-size: 28px; line-height: 1.12;
+      letter-spacing: -0.02em; max-width: 16ch;
+    }
+    .r169 .h-main { font-size: 32px; margin-top: 8px; }
+    .r169 .proof { padding: 10px 12px; margin-top: 10px; }
+    .r169 .proof .kicker { font-size: 10px; }
+    .r169 .proof .line { font-size: 18px; line-height: 1.15; margin-top: 2px; }
+    .r169 .pills { gap: 6px; margin-top: 8px; }
+    .r169 .pill { padding: 6px 8px; font-size: 13px; }
+    .r169 .cta { margin-top: auto; width: 100%; padding: 12px; font-size: 18px; }
+    .r169 .foot { margin-top: 8px; display: flex; justify-content: space-between; gap: 10px; }
+    .r169 .addr, .r169 .url { font-size: 13px; }
+    .r169 .url { color: #ff8562; }
+    .r169 .right { display: grid; place-items: center; }
+    .r169 .wheel { width: 300px; }
+    .r169 .ball { width: 26px; height: 26px; }
+
+    /* ---- 9:16  607×1080 ---- */
+    .r916 { width: 607px; height: 1080px; }
+    .r916 .inner { padding: 36px 32px 28px; }
+    .r916 .top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .r916 .logo { width: 150px; }
+    .r916 .badge { padding: 4px 8px 4px 4px; min-width: 0; }
+    .r916 .badge svg { width: 26px; height: 26px; }
+    .r916 .badge b { font-size: 18px; }
+    .r916 .badge .stars { font-size: 9px; }
+    .r916 .badge small { font-size: 8px; }
+    .r916 .tag { margin-top: 22px; padding: 8px 14px; font-size: 14px; width: fit-content; }
+    .r916 .hook {
+      margin: 14px 0 0; font-weight: 800; font-size: 34px; line-height: 1.12;
+      letter-spacing: -0.02em;
+    }
+    .r916 .h-main { font-size: 36px; margin-top: 12px; }
+    .r916 .wheel { width: 280px; margin: 22px auto; }
+    .r916 .proof { padding: 14px 16px; }
+    .r916 .proof .kicker { font-size: 11px; }
+    .r916 .proof .line { font-size: 22px; line-height: 1.15; margin-top: 4px; }
+    .r916 .pills { gap: 8px; margin-top: 12px; }
+    .r916 .pill { padding: 8px 10px; font-size: 14px; }
+    .r916 .cta { margin-top: auto; width: 100%; padding: 16px; font-size: 20px; }
+    .r916 .foot { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+    .r916 .addr, .r916 .url { font-size: 14px; }
+    .r916 .url { color: #ff8562; }
+    .r916 .ball { width: 28px; height: 28px; }
+
+    /* preview scale */
+    .frame.story-frame { width: calc(1080px * 0.38); height: calc(1920px * 0.38); }
+    .frame.feed-frame { width: calc(1080px * 0.42); height: calc(1350px * 0.42); }
+    .frame.wide-frame { width: calc(1200px * 0.72); height: calc(628px * 0.72); }
+    .frame.square-frame { width: calc(1080px * 0.5); height: calc(1080px * 0.5); }
+    .frame.r45-frame { width: calc(1080px * 0.42); height: calc(1350px * 0.42); }
+    .frame.r169-frame { width: calc(1080px * 0.72); height: calc(607px * 0.72); }
+    .frame.r916-frame { width: calc(607px * 0.5); height: calc(1080px * 0.5); }
+    .frame .artboard { transform-origin: top left; }
+    .story-frame .artboard { transform: scale(0.38); }
+    .feed-frame .artboard { transform: scale(0.42); }
+    .wide-frame .artboard { transform: scale(0.72); }
+    .square-frame .artboard { transform: scale(0.5); }
+    .r45-frame .artboard { transform: scale(0.42); }
+    .r169-frame .artboard { transform: scale(0.72); }
+    .r916-frame .artboard { transform: scale(0.5); }
+
+    /* shot: only one full-size board, no chrome */
+    body.shot { background: #121212; }
+    body.shot .studio { display: none; }
+    body.shot .shot-stage { display: block; }
+    .shot-stage { display: none; }
+    body.shot .shot-stage .artboard { transform: none; }
+
+    @media print {
+      body { background: #121212; }
+      .studio { display: none; }
+      .shot-stage { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="studio">
+  <div class="studio-head">
+    <h1><span style="color:#ff2c2c">Креатив</span> лототрона</h1>
+    <p>
+      Баннер в стиле сайта. Клик ведёт на
+      <a href="https://sochnyvertelanapa.github.io/" target="_blank" rel="noopener">sochnyvertelanapa.github.io</a>.
+      Откройте формат в режиме скриншота — останется только макет в реальном размере. Снимите окно или кадр страницы.
+    </p>
+    <div class="formats">
+      <a class="primary" href="?shot=square">1:1 · 1080×1080</a>
+      <a href="?shot=r45">4:5 · 1080×1350</a>
+      <a href="?shot=r169">16:9 · 1080×607</a>
+      <a href="?shot=r916">9:16 · 607×1080</a>
+      <a href="lototron-video.html">Видео 1:1</a>
+      <a href="lototron-video-pack.html">Видео 4:5 · 9:16 · 16:9</a>
+      <a href="?">Все форматы</a>
+      <a href="lototron-square-1080.png" download>PNG 1:1</a>
+      <a href="lototron-4x5-1080x1350.png" download>PNG 4:5</a>
+      <a href="lototron-16x9-1080x607.png" download>PNG 16:9</a>
+      <a href="lototron-9x16-607x1080.png" download>PNG 9:16</a>
+      <a href="lototron-1x1.mp4" download>MP4 1:1</a>
+      <a href="lototron-4x5-30s.mp4" download>MP4 4:5 30с</a>
+      <a href="lototron-4x5-180s.mp4" download>MP4 4:5 180с</a>
+      <a href="lototron-9x16-30s.mp4" download>MP4 9:16 30с</a>
+      <a href="lototron-9x16-180s.mp4" download>MP4 9:16 180с</a>
+      <a href="lototron-16x9-30s.mp4" download>MP4 16:9 30с</a>
+      <a href="lototron-16x9-180s.mp4" download>MP4 16:9 180с</a>
+    </div>
+  </div>
+
+  <div class="gallery">
+    <div class="card">
+      <div class="card-label">Баннер 1:1 — 1080×1080</div>
+      <div class="frame square-frame" data-preview="square"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">4:5 — 1080×1350</div>
+      <div class="frame r45-frame" data-preview="r45"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">16:9 — 1080×607</div>
+      <div class="frame r169-frame" data-preview="r169"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">9:16 — 607×1080</div>
+      <div class="frame r916-frame" data-preview="r916"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Stories / Reels / Telegram — 1080×1920</div>
+      <div class="frame story-frame" data-preview="story"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Лента Instagram / VK — 1080×1350</div>
+      <div class="frame feed-frame" data-preview="feed"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Яндекс Директ / VK / Facebook — 1200×628</div>
+      <div class="frame wide-frame" data-preview="wide"></div>
+    </div>
+  </div>
+</div>
+
+<div class="shot-stage" data-shot-stage></div>
+
+<template id="tpl-square">
+  <article class="artboard square" data-creative="square">
+    <div class="glow"></div>
+    <div class="embers" data-embers></div>
+    <div class="inner">
+      <div class="top">
+        <img class="logo" src="../assets/logo.svg" alt="Сочный Вертел">
+        <div class="badge">
+          <svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true">
+            <circle cx="16" cy="16" r="16" fill="#FC3F1D"/>
+            <path d="M16.1 6.6c-3.9 0-6.6 2.5-6.6 6.1 0 4.4 5.5 11.2 6.2 12.1.2.2.5.2.7 0 .7-.9 6.2-7.7 6.2-12.1 0-3.6-2.7-6.1-6.5-6.1zm0 8.4a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z" fill="#fff"/>
+          </svg>
+          <span><small>Яндекс Карты</small><b>5,0</b><span class="stars">★★★★★</span></span>
+        </div>
+      </div>
+      <span class="tag">Беспроигрышная лотерея</span>
+      <p class="hook">Пришёл за шаурмой — ушёл с подарком</p>
+      <h2 class="h-main"><span class="red">Лототрон</span> от 500 ₽</h2>
+      <div class="body">
+        <div>
+          <div class="proof">
+            <div class="kicker">Главное правило</div>
+            <div class="line">Проигрышных шариков <em>нет</em></div>
+          </div>
+          <div class="pills">
+            <span class="pill">🥫 Соус</span>
+            <span class="pill">🍟 Фри</span>
+            <span class="pill">🥤 Напиток</span>
+            <span class="pill gold">🏆 10 000 ₽</span>
+          </div>
+        </div>
+        <div class="wheel" aria-hidden="true">
+          <div class="wheel-glass"></div>
+          <div class="balls" data-balls></div>
+        </div>
+      </div>
+      <div class="cta">Забери подарок →</div>
+      <div class="foot">
+        <span class="addr">Анапа, Крымская 182Г</span>
+        <span class="url">sochnyvertelanapa.github.io</span>
+      </div>
+    </div>
+  </article>
+</template>
+
+<template id="tpl-r45">
+  <article class="artboard r45" data-creative="r45">
+    <div class="glow"></div>
+    <div class="embers" data-embers></div>
+    <div class="inner">
+      <div class="top">
+        <img class="logo" src="../assets/logo.svg" alt="Сочный Вертел">
+        <div class="badge">
+          <svg viewBox="0 0 32 32" width="36" height="36" aria-hidden="true">
+            <circle cx="16" cy="16" r="16" fill="#FC3F1D"/>
+            <path d="M16.1 6.6c-3.9 0-6.6 2.5-6.6 6.1 0 4.4 5.5 11.2 6.2 12.1.2.2.5.2.7 0 .7-.9 6.2-7.7 6.2-12.1 0-3.6-2.7-6.1-6.5-6.1zm0 8.4a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z" fill="#fff"/>
+          </svg>
+          <span><small>Яндекс Карты</small><b>5,0</b><span class="stars">★★★★★</span></span>
+        </div>
+      </div>
+      <span class="tag">Беспроигрышная лотерея</span>
+      <p class="hook">Пришёл за шаурмой — ушёл с подарком</p>
+      <h2 class="h-main"><span class="red">Лототрон</span> от 500 ₽</h2>
+      <div class="body">
+        <div>
+          <div class="proof">
+            <div class="kicker">Главное правило</div>
+            <div class="line">Проигрышных шариков <em>нет</em></div>
+          </div>
+          <div class="pills">
+            <span class="pill">🥫 Соус</span>
+            <span class="pill">🍟 Фри</span>
+            <span class="pill">🥤 Напиток</span>
+            <span class="pill gold">🏆 10 000 ₽</span>
+          </div>
+        </div>
+        <div class="wheel" aria-hidden="true">
+          <div class="wheel-glass"></div>
+          <div class="balls" data-balls></div>
+        </div>
+      </div>
+      <div class="cta">Забери подарок →</div>
+      <div class="foot">
+        <span class="addr">Анапа, Крымская 182Г</span>
+        <span class="url">sochnyvertelanapa.github.io</span>
+      </div>
+    </div>
+  </article>
+</template>
+
+<template id="tpl-r169">
+  <article class="artboard r169" data-creative="r169">
+    <div class="glow"></div>
+    <div class="embers" data-embers></div>
+    <div class="inner">
+      <div class="left">
+        <div class="top">
+          <img class="logo" src="../assets/logo.svg" alt="Сочный Вертел">
+          <div class="badge">
+            <svg viewBox="0 0 32 32" width="24" height="24" aria-hidden="true">
+              <circle cx="16" cy="16" r="16" fill="#FC3F1D"/>
+              <path d="M16.1 6.6c-3.9 0-6.6 2.5-6.6 6.1 0 4.4 5.5 11.2 6.2 12.1.2.2.5.2.7 0 .7-.9 6.2-7.7 6.2-12.1 0-3.6-2.7-6.1-6.5-6.1zm0 8.4a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z" fill="#fff"/>
+            </svg>
+            <span><small>Яндекс Карты</small><b>5,0</b><span class="stars">★★★★★</span></span>
+          </div>
+        </div>
+        <span class="tag">Беспроигрышная лотерея</span>
+        <p class="hook">Пришёл за шаурмой — ушёл с подарком</p>
+        <h2 class="h-main"><span class="red">Лототрон</span> от 500 ₽</h2>
+        <div class="proof">
+          <div class="kicker">Главное правило</div>
+          <div class="line">Проигрышных шариков <em>нет</em></div>
+        </div>
+        <div class="pills">
+          <span class="pill">🥫 Соус</span>
+          <span class="pill">🍟 Фри</span>
+          <span class="pill">🥤 Напиток</span>
+          <span class="pill gold">🏆 10 000 ₽</span>
+        </div>
+        <div class="cta">Забери подарок →</div>
+        <div class="foot">
+          <span class="addr">Анапа, Крымская 182Г</span>
+          <span class="url">sochnyvertelanapa.github.io</span>
+        </div>
+      </div>
+      <div class="right">
+        <div class="wheel" aria-hidden="true">
+          <div class="wheel-glass"></div>
+          <div class="balls" data-balls></div>
+        </div>
+      </div>
+    </div>
+  </article>
+</template>
+
+<template id="tpl-r916">
+  <article class="artboard r916" data-creative="r916">
+    <div class="glow"></div>
+    <div class="embers" data-embers></div>
+    <div class="inner">
+      <div class="top">
+        <img class="logo" src="../assets/logo.svg" alt="Сочный Вертел">
+        <div class="badge">
+          <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
+            <circle cx="16" cy="16" r="16" fill="#FC3F1D"/>
+            <path d="M16.1 6.6c-3.9 0-6.6 2.5-6.6 6.1 0 4.4 5.5 11.2 6.2 12.1.2.2.5.2.7 0 .7-.9 6.2-7.7 6.2-12.1 0-3.6-2.7-6.1-6.5-6.1zm0 8.4a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z" fill="#fff"/>
+          </svg>
+          <span><small>Яндекс Карты</small><b>5,0</b><span class="stars">★★★★★</span></span>
+        </div>
+      </div>
+      <span class="tag">Беспроигрышная лотерея</span>
+      <p class="hook">Пришёл за шаурмой — ушёл с подарком</p>
+      <h2 class="h-main"><span class="red">Лототрон</span><br>от 500 ₽</h2>
+      <div class="wheel" aria-hidden="true">
+        <div class="wheel-glass"></div>
+        <div class="balls" data-balls></div>
+      </div>
+      <div class="proof">
+        <div class="kicker">Главное правило</div>
+        <div class="line">Проигрышных шариков <em>нет</em></div>
+      </div>
+      <div class="pills">
+        <span class="pill">🥫 Соус</span>
+        <span class="pill">🍟 Фри</span>
+        <span class="pill">🥤 Напиток</span>
+        <span class="pill gold">🏆 10 000 ₽</span>
+      </div>
+      <div class="cta">Забери подарок →</div>
+      <div class="foot">
+        <span class="addr">Анапа, Крымская 182Г</span>
+        <span class="url">sochnyvertelanapa.github.io</span>
+      </div>
+    </div>
+  </article>
+</template>
+
+<template id="tpl-story">
+  <article class="artboard story" data-creative="story">
+    <div class="glow"></div>
+    <div class="embers" data-embers></div>
+    <div class="inner">
+      <div class="top">
+        <img class="logo" src="../assets/logo.svg" alt="Сочный Вертел">
+        <div class="badge">
+          <svg viewBox="0 0 32 32" width="40" height="40" aria-hidden="true">
+            <circle cx="16" cy="16" r="16" fill="#FC3F1D"/>
+            <path d="M16.1 6.6c-3.9 0-6.6 2.5-6.6 6.1 0 4.4 5.5 11.2 6.2 12.1.2.2.5.2.7 0 .7-.9 6.2-7.7 6.2-12.1 0-3.6-2.7-6.1-6.5-6.1zm0 8.4a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z" fill="#fff"/>
+          </svg>
+          <span><small>Яндекс Карты</small><b>5,0</b><span class="stars">★★★★★</span></span>
+        </div>
+      </div>
+      <span class="tag">Беспроигрышная лотерея</span>
+      <h2 class="h-main"><span class="red">Лототрон</span><br>от 500 ₽</h2>
+      <p class="lead">Чек от 500 ₽ — крути барабан на кассе</p>
+      <div class="wheel" aria-hidden="true">
+        <div class="wheel-glass"></div>
+        <div class="balls" data-balls></div>
+      </div>
+      <div class="proof">
+        <div class="kicker">Главное правило</div>
+        <div class="line">Проигрышных шариков <em>нет</em></div>
+      </div>
+      <div class="pills">
+        <span class="pill">🥫 Соус</span>
+        <span class="pill">🍟 Фри</span>
+        <span class="pill">🥤 Напиток</span>
+        <span class="pill gold">🏆 До 10 000 ₽</span>
+      </div>
+      <div class="cta">Забери подарок →</div>
+      <div class="foot">
+        <span class="addr">Анапа, Крымская 182Г</span>
+        <span class="url">sochnyvertelanapa.github.io</span>
+      </div>
+    </div>
+  </article>
+</template>
+
+<template id="tpl-feed">
+  <article class="artboard feed" data-creative="feed">
+    <div class="glow"></div>
+    <div class="embers" data-embers></div>
+    <div class="inner">
+      <div class="top">
+        <img class="logo" src="../assets/logo.svg" alt="Сочный Вертел">
+        <div class="badge">
+          <svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true">
+            <circle cx="16" cy="16" r="16" fill="#FC3F1D"/>
+            <path d="M16.1 6.6c-3.9 0-6.6 2.5-6.6 6.1 0 4.4 5.5 11.2 6.2 12.1.2.2.5.2.7 0 .7-.9 6.2-7.7 6.2-12.1 0-3.6-2.7-6.1-6.5-6.1zm0 8.4a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z" fill="#fff"/>
+          </svg>
+          <span><small>Яндекс Карты</small><b>5,0</b><span class="stars">★★★★★</span></span>
+        </div>
+      </div>
+      <div class="mid">
+        <div>
+          <span class="tag">Беспроигрышная лотерея</span>
+          <h2 class="h-main"><span class="red">Лототрон</span><br>от 500 ₽</h2>
+          <p class="lead">Крути барабан на кассе. Проигрышных шариков нет.</p>
+          <div class="pills">
+            <span class="pill">🥫 Соус</span>
+            <span class="pill">🍟 Фри</span>
+            <span class="pill">🥤 Напиток</span>
+            <span class="pill gold">🏆 10 000 ₽</span>
+          </div>
+        </div>
+        <div class="wheel" aria-hidden="true">
+          <div class="wheel-glass"></div>
+          <div class="balls" data-balls></div>
+        </div>
+      </div>
+      <div class="cta">Забери подарок →</div>
+      <div class="foot">
+        <span class="addr">Анапа, Крымская 182Г</span>
+        <span class="url">sochnyvertelanapa.github.io</span>
+      </div>
+    </div>
+  </article>
+</template>
+
+<template id="tpl-wide">
+  <article class="artboard wide" data-creative="wide">
+    <div class="glow"></div>
+    <div class="embers" data-embers></div>
+    <div class="inner">
+      <div>
+        <div class="top">
+          <img class="logo" src="../assets/logo.svg" alt="Сочный Вертел">
+          <div class="badge">
+            <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
+              <circle cx="16" cy="16" r="16" fill="#FC3F1D"/>
+              <path d="M16.1 6.6c-3.9 0-6.6 2.5-6.6 6.1 0 4.4 5.5 11.2 6.2 12.1.2.2.5.2.7 0 .7-.9 6.2-7.7 6.2-12.1 0-3.6-2.7-6.1-6.5-6.1zm0 8.4a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z" fill="#fff"/>
+            </svg>
+            <span><small>Яндекс Карты</small><b>5,0</b><span class="stars">★★★★★</span></span>
+          </div>
+        </div>
+        <span class="tag">Беспроигрышная лотерея</span>
+        <h2 class="h-main"><span class="red">Лототрон</span><br>от 500 ₽</h2>
+        <p class="lead">Проигрышных шариков нет. Джекпот — сертификат 10 000 ₽.</p>
+        <div class="pills">
+          <span class="pill">🥫 Соус</span>
+          <span class="pill">🍟 Фри</span>
+          <span class="pill">🥤 Напиток</span>
+          <span class="pill gold">🏆 10 000 ₽</span>
+        </div>
+        <div class="cta">Забери подарок →</div>
+        <div class="foot">
+          <span class="addr">Анапа, Крымская 182Г</span>
+          <span class="url">sochnyvertelanapa.github.io</span>
+        </div>
+      </div>
+      <div class="right">
+        <div class="wheel" aria-hidden="true">
+          <div class="wheel-glass"></div>
+          <div class="balls" data-balls></div>
+        </div>
+      </div>
+    </div>
+  </article>
+</template>
+
+<script>
+  const COLORS = ["#ff2c2c", "#ff5e2c", "#ffffff", "#ffb347", "#ff2c2c", "#d9d9d9", "#ff5e2c"];
+  const BALLS = [
+    [22, 58], [38, 70], [54, 64], [68, 74], [30, 80], [48, 82], [62, 56],
+    [18, 42], [34, 48], [50, 40], [66, 46], [78, 60], [26, 32], [44, 28],
+    [58, 30], [72, 36], [40, 58], [56, 52], [33, 64], [47, 72], [63, 68],
+    [75, 50], [28, 50], [52, 76], [41, 38], [60, 42]
+  ];
+
+  function fillBalls(root) {
+    root.querySelectorAll("[data-balls]").forEach((box) => {
+      box.innerHTML = BALLS.map(([x, y], i) => {
+        const c = COLORS[i % COLORS.length];
+        return `<div class="ball" style="--c:${c};left:calc(${x}% - 17px);top:calc(${y}% - 17px)"></div>`;
+      }).join("");
+    });
+  }
+
+  function fillEmbers(root) {
+    root.querySelectorAll("[data-embers]").forEach((box, bi) => {
+      let html = "";
+      for (let i = 0; i < 18; i++) {
+        const left = (i * 17 + bi * 11) % 100;
+        const bottom = (i * 29 + 8) % 86;
+        const size = 3 + (i % 4);
+        html += `<i style="left:${left}%;bottom:${bottom}%;width:${size}px;height:${size}px"></i>`;
+      }
+      box.innerHTML = html;
+    });
+  }
+
+  function mount(name, target) {
+    const tpl = document.getElementById("tpl-" + name);
+    const node = tpl.content.cloneNode(true);
+    target.appendChild(node);
+    fillBalls(target);
+    fillEmbers(target);
+  }
+
+  const shot = new URLSearchParams(location.search).get("shot");
+  if (shot && ["square", "r45", "r169", "r916", "story", "feed", "wide"].includes(shot)) {
+    document.body.classList.add("shot");
+    const stage = document.querySelector("[data-shot-stage]");
+    mount(shot, stage);
+    document.title = "Скриншот " + shot + " · Лототрон";
+  } else {
+    document.querySelectorAll("[data-preview]").forEach((el) => mount(el.dataset.preview, el));
+  }
+</script>
+</body>
+</html>
